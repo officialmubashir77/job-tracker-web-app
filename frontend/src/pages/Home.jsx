@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState } from "react";
-import api from "../lib/axios";
+import { getHealth } from "../services/health.service";
 
 const Home = () => {
   const [message, setMessage] = useState("");
@@ -9,10 +10,10 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("/health");
-        console.log(response.data);
+        const data = await getHealth();
+        console.log(data);
 
-        setMessage(response.data.message);
+        setMessage(data.message);
       } catch (error) {
         console.error("API Error:", error);
         setError("Failed to fetch server data");
@@ -30,7 +31,7 @@ const Home = () => {
 
       {loading && <p>Loading...</p>}
 
-      {error && <p className="text-red-600">{error}</p>}
+      {error && (<p className="text-red-600">{error}</p>)}
 
       {!loading && !error && <p>{message}</p>}
     </div>
