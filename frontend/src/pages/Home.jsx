@@ -1,9 +1,40 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import api from "../lib/axios";
 
 const Home = () => {
-  return (
-    <div className='text-3xl bg-amber-500'>Home</div>
-  )
-}
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-export default Home
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get("/health");
+        console.log(response.data);
+
+        setMessage(response.data.message);
+      } catch (error) {
+        console.error("API Error:", error);
+        setError("Failed to fetch server data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <div className="text-3xl bg-amber-500 p-5">
+      <h1>HOME PAGE WORKING !!!</h1>
+
+      {loading && <p>Loading...</p>}
+
+      {error && <p className="text-red-600">{error}</p>}
+
+      {!loading && !error && <p>{message}</p>}
+    </div>
+  );
+};
+
+export default Home;

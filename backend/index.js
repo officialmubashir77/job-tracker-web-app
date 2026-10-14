@@ -1,6 +1,7 @@
 const dotenv = require('dotenv').config();
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const port = 3000 || process.env.PORT;
 
 // Connect to MongoDB database
@@ -8,6 +9,7 @@ const connectDB = require('./config/db.js');
 connectDB();
 
 // Middleware to parse JSON request bodies
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
