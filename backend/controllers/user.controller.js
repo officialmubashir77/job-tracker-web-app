@@ -129,10 +129,17 @@ const loginUser = async (req, res) => {
     }
 
     // Generate JWT
-    const token = jwt.sign( { sub: user._id.toString() }, process.env.JWT_SECRET, { expiresIn: "1d" } );
+    const token = jwt.sign(
+      { _id: user._id.toString(), email: user.email, name: user.name },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" },
+    );
 
     // Store JWT in HttpOnly cookie
-    res.cookie("token", token, { ...cookieOptions, maxAge: 24 * 60 * 60 * 1000,});
+    res.cookie("token", token, {
+      ...cookieOptions,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
     return res.status(200).json({
       success: true,
